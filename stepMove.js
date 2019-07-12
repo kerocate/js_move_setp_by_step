@@ -2,14 +2,14 @@
  * 这个方法可以让指定目标元素根据滚轮操作来移动位置。其移动的方式是步进式的，可以通过三个可选参数来调整手感。
  * 
  * 注意：动画请在css中添加transition属性进行插值。
- * @param {HTMLElement} targetElement 目标元素
- * @param {Number} decisionCoefficient 判定严格度
- * @param {String} axisDirection 移动轴向
- * @param {Number} perDisplacement 位移路程
- * @param {String} displacementUnit 位移单位
+ * @param {HTMLElement} targetElement 目标元素 应写css选择器
+ * @param {Number} decisionCoefficient 判定严格度 默认值60 是相对值
+ * @param {String} axisDirection 移动轴向 默认Y 可选X
+ * @param {Number} perDisplacement 位移路程 默认100 下一个参数指定单位
+ * @param {String} displacementUnit 位移单位 默认px 可以改成其他单位
  * @author 军喵
  */
-function moveStepByStep(targetElement, decisionCoefficient = 60, axisDirection = "y", perDisplacement = 100, displacementUnit = "px") {
+function wheelStepByStep(targetElement, decisionCoefficient = 60, axisDirection = "y", perDisplacement = 100, displacementUnit = "px") {
     let wheelCount = 0;
     let wheelDirection = '';
     let scrollingFlag = false;
@@ -54,7 +54,7 @@ function moveStepByStep(targetElement, decisionCoefficient = 60, axisDirection =
         //console.log(scrollingFlag);
     }
 }
-moveStepByStep("#container", 60, "y", 200, "px");
+wheelStepByStep("#container", 60, "y", 200, "px");
 
 
 //事件测试
