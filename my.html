@@ -16,6 +16,7 @@
             html,
             body {
                 overflow: hidden;
+                touch-action: none; /*禁用浏览器下滑刷新*/
             }
 
             #container {
@@ -32,6 +33,14 @@
                 background-color: darkgoldenrod;
                 border-bottom: 5px solid greenyellow;
             }
+            #second{
+                height: 2000px;
+                width: 200px;
+                background: linear-gradient(blue, 10%, pink);
+                position: absolute;
+                top: 0; left: 200px;
+                transition: all 1s;
+            }
         </style>
     </head>
 
@@ -42,6 +51,9 @@
             <div id="a3"></div>
             <div id="a4"></div>
             <div id="a5"></div>
+        </div>
+        <div id="second">
+
         </div>
     </body>
     <script src="stepMove.js"></script>
