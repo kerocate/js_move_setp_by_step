@@ -56,10 +56,14 @@ let stepMove = {
                 if (Math.abs(stepMove.wheelCount) > stepMove.decisionCoefficient && stepMove.scrollingFlag === false) {
                     // console.log(wheelCount)
                     stepMove.scrollPage();
+                }else{
+                    stepMove.wheelCount1 = stepMove.wheelCount = null;
                 }
             } else {
                 stepMove.wheelCount1 = stepMove.wheelCount = null;
             }
+        }else{
+            stepMove.wheelCount1 = stepMove.wheelCount = null;
         }
         //console.log(yControll);
         // console.log(stepMove.decisionCoefficient ==  stepMove.decisionCoefficient)
@@ -67,29 +71,33 @@ let stepMove = {
     /**
      * 滚动指定元素
      */
-    scrollPage: function () {
+    scrollPage: function (event) {
         stepMove.scrollingFlag = true;
         stepMove.wheelCount1 = stepMove.wheelCount = null;
         stepMove.touchCount = null;
-        if (stepMove.touchDirection == "up" || stepMove.wheelDirection == "down" && stepMove.targetElement != null) {
+        if (stepMove.touchDirection === "up" || stepMove.wheelDirection == "down" && stepMove.targetElement != null) {
             stepMove.changeCount = stepMove.changeCount - stepMove.perDisplacement; //用trasfrom要改变这里的正负(原本是+)
             document.querySelector(stepMove.targetElement).style.transform = "translate" + stepMove.axisDirection.toUpperCase() + "(" + stepMove.changeCount + stepMove.displacementUnit + ")";
-        } else if (stepMove.touchDirection == "down" || stepMove.wheelDirection == 'up' && stepMove.targetElement != null) {
+            stepMove.getTouchStart(event);
+        } else if (stepMove.touchDirection === "down" || stepMove.wheelDirection == 'up' && stepMove.targetElement != null) {
             stepMove.changeCount = stepMove.changeCount + stepMove.perDisplacement;
             document.querySelector(stepMove.targetElement).style.transform = "translate" + stepMove.axisDirection.toUpperCase() + "(" + stepMove.changeCount + stepMove.displacementUnit + ")";
+            stepMove.getTouchStart(event);
         }
         // console.log(stepMove.changeCount);
         //console.log(stepMove.scrollingFlag);
     },
-    getTouchStart: () => {
+    getTouchStart: (event) => {
         stepMove.startY = event.targetTouches[0].clientY;
         stepMove.startX = event.targetTouches[0].clientX;
+        stepMove.getTouchDirection(event);
+        // console.log(stepMove.startX+" "+stepMove.startY)
     },
     getTouchDirection: () => {
         let y = stepMove.startY - event.targetTouches[0].clientY;
         y > 0 ? stepMove.touchDirection = 'up' : stepMove.touchDirection = 'down';
         stepMove.touchCount++;
-        stepMove.getTouchCount(y);
+        stepMove.getTouchCount(y,event);
     },
     touchStepByStep: (targetElement, decisionCoefficient = 100, axisDirection = "y", perDisplacement = 100, displacementUnit = "px") => {
         stepMove.decisionCoefficient = decisionCoefficient;
@@ -105,18 +113,20 @@ let stepMove = {
             stepMove.scrollingFlag = false;
         });
     },
-    getTouchCount: (y) => {
-        // console.log("y:" + y + " Count:" + stepMove.touchCount)
+    getTouchCount: (y,event) => {
+        //console.log("y:" + y + " Count:" + stepMove.touchCount)
         if (stepMove.scrollingFlag == false) {
-            if (Math.abs(y) / stepMove.touchCount > 60 && Math.abs(y) / stepMove.touchCount < 100) {
-                if (Math.abs(y) > stepMove.decisionCoefficient && stepMove.scrollingFlag === false) {
+            if (Math.abs(y) / stepMove.touchCount > 50 && Math.abs(y) / stepMove.touchCount < 100) {
+                if (Math.abs(y) > stepMove.decisionCoefficient) {
                     // document.querySelector('html').style.backgroundColor = "red"
-                    stepMove.scrollPage();
+                    stepMove.scrollPage(event);
                 }
             } else {
-                stepMove.touchCount = 1;
-                // document.querySelector('html').style.backgroundColor = ""
+                y = stepMove.touchCount = 1
+              // document.querySelector('html').style.backgroundColor = ""
             }
+        } else {
+            y = stepMove.touchCount = 1;
         }
     },
     /**
